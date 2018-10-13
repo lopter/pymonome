@@ -14,7 +14,7 @@ class Life(monome.App):
     def on_grid_ready(self):
         self.world = [[0 for col in range(self.grid.width)] for row in range(self.grid.height)]
         self.randomize()
-        self.task = asyncio.async(self.begin())
+        self.task = asyncio.ensure_future(self.begin())
 
     def on_grid_disconnect(self):
         self.task.cancel()
@@ -72,7 +72,7 @@ class Life(monome.App):
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     life_app = Life()
-    asyncio.async(monome.SerialOsc.create(loop=loop, autoconnect_app=life_app))
+    asyncio.ensure_future(monome.SerialOsc.create(loop=loop, autoconnect_app=life_app))
 
     try:
         loop.run_forever()

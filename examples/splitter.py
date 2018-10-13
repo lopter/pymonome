@@ -25,14 +25,14 @@ class SplitterSerialOsc(monome.SerialOsc):
 
     def on_device_added(self, id, type, port):
         if type == "monome 128":
-            asyncio.async(self.splitter_connect(port))
+            asyncio.ensure_future(self.splitter_connect(port))
 
 if __name__ == "__main__":
     life1 = Life()
     life2 = Life()
 
     loop = asyncio.get_event_loop()
-    asyncio.async(SplitterSerialOsc.create(loop=loop, app1=life1, app2=life2))
+    asyncio.ensure_future(SplitterSerialOsc.create(loop=loop, app1=life1, app2=life2))
 
     try:
         loop.run_forever()

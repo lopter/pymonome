@@ -20,12 +20,12 @@ class Faders(monome.App):
             row_value += FADERS_MAX_VALUE / (self.grid.height - 1)
 
         self.values = [random.randint(0, FADERS_MAX_VALUE) for f in range(self.grid.width)]
-        self.faders = [asyncio.async(self.fade_to(f, 0)) for f in range(self.grid.width)]
+        self.faders = [asyncio.ensure_future(self.fade_to(f, 0)) for f in range(self.grid.width)]
 
     def on_grid_key(self, x, y, s):
         if s == 1:
             self.faders[x].cancel()
-            self.faders[x] = asyncio.async(self.fade_to(x, self.row_to_value(y)))
+            self.faders[x] = asyncio.ensure_future(self.fade_to(x, self.row_to_value(y)))
 
     def value_to_row(self, value):
         return sorted([i for i in range(self.grid.height)], key=lambda i: abs(self.row_values[i] - value))[0]
@@ -47,5 +47,5 @@ class Faders(monome.App):
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     faders_app = Faders()
-    asyncio.async(monome.SerialOsc.create(loop=loop, autoconnect_app=faders_app))
+    asyncio.ensure_future(monome.SerialOsc.create(loop=loop, autoconnect_app=faders_app))
     loop.run_forever()

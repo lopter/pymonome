@@ -10,7 +10,7 @@ class Lights(monome.Monome):
 
     def ready(self):
         self.alive = True
-        asyncio.async(self.animate())
+        asyncio.ensure_future(self.animate())
 
     def grid_key(self, x, y, s):
         if s == 1:
@@ -37,5 +37,5 @@ class Lights(monome.Monome):
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    asyncio.async(monome.create_serialosc_connection(Lights), loop=loop)
+    asyncio.ensure_future(monome.create_serialosc_connection(Lights), loop=loop)
     loop.run_forever()

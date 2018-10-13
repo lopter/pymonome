@@ -24,14 +24,14 @@ class PagesSerialOsc(monome.SerialOsc):
         page_manager.connect()
 
     def on_device_added(self, id, type, port):
-        asyncio.async(self.pages_connect(port))
+        asyncio.ensure_future(self.pages_connect(port))
 
 if __name__ == "__main__":
     life1 = Life()
     life2 = Life()
 
     loop = asyncio.get_event_loop()
-    asyncio.async(PagesSerialOsc.create(loop=loop, app1=life1, app2=life2))
+    asyncio.ensure_future(PagesSerialOsc.create(loop=loop, app1=life1, app2=life2))
 
     try:
         loop.run_forever()
